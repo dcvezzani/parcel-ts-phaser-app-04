@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import Actor from '~/classes/actor';
 
 export default class MyScene extends Phaser.Scene {
     constructor() {
@@ -13,21 +14,13 @@ export default class MyScene extends Phaser.Scene {
     }
 
     create(): void {
-        const cyborg = this.physics.add.sprite(100, 100, 'cyborg');
-        cyborg.setScale(0.75);
-        cyborg.setVelocity(-200, 200);
-        cyborg.setBounce(1);
-        cyborg.setCollideWorldBounds(true);
+        const cyborg = new Actor(this, 'cyborg', new Phaser.Math.Vector2(100, 100), 0.75);
+        const robins = [
+            new Actor(this, 'robin', new Phaser.Math.Vector2(300, 300), 0.5, 500),
+            new Actor(this, 'robin', new Phaser.Math.Vector2(400, 400), 0.5, 500),
+            new Actor(this, 'robin', new Phaser.Math.Vector2(500, 500), 0.5, 500),
+        ];
 
-        const robin = this.physics.add.image(200, 200, 'robin');
-        robin.setScale(-0.5, 0.5);
-        // console.log('>>>robin.body.offset', robin.body.offset.x, robin.body.offset.y);
-        robin.body.setOffset(robin.body.offset.x + robin.width, robin.body.offset.y);
-        robin.setGravityY(500);
-        robin.setVelocity(200, 200);
-        robin.setBounce(1);
-        robin.setCollideWorldBounds(true);
-
-        this.physics.add.collider(cyborg, robin);
+        this.physics.add.collider([cyborg, ...robins], [cyborg, ...robins]);
     }
 }
