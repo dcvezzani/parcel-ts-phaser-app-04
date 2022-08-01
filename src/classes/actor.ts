@@ -4,7 +4,8 @@ import { GameObjects, Physics, Input } from 'phaser';
 export default class Actor extends Phaser.Physics.Arcade.Sprite {
     private _scale: number;
     private debugOrigin!: GameObjects.Arc;
-    private debugBoundingBoxOrigin!: GameObjects.Arc;
+    private debugBoundingBoxCalculatedOrigin!: GameObjects.Arc;
+    private debugBoundingBoxPosition!: GameObjects.Arc;
     private keySpace: Input.Keyboard.Key;
 
     constructor(
@@ -22,7 +23,7 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         if (gravity != undefined) this.setGravityY(gravity);
-        // this.setGravityY(-300);
+        this.setGravityY(-300);
 
         this.setBounce(1);
         this.setCollideWorldBounds(true);
@@ -31,12 +32,20 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         this.setVelocity(startingVelocity.x, startingVelocity.y);
         this._setScale(this._scale);
 
+        // For debug
+        // this.setVelocity(startingVelocity.x, 0);
+        // this.visible = false;
+
+        // For debug
+        // this.showPoints();
+
         this.debugCreateOriginPoints();
 
         this.keySpace = this.scene.input.keyboard.addKey(32);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.keySpace.on('down', (event: KeyboardEvent) => {
             this.setVelocity(-this.getBody().velocity.x, this.getBody().velocity.y);
+
             // this.scaleX = -this.scaleX;
             // if (this.scaleX > 0) this.getBody().setOffset(0, 0);
             // else this.getBody().setOffset(this.width, 0);
@@ -54,6 +63,9 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         this.debugShowOriginPoints();
     }
 
+    // Randomly determine the x velocity (horizontal direction) for a given sprite
+    // While the starting x direction randomly selects a negative (left) or positive (right)
+    // value, the initial force vectors should always be the same.
     private getStartingVelocity(): Phaser.Math.Vector2 {
         const startingVelocityXValues: number[] = [-200, 200];
         const randomStartingVelocityX: number =
@@ -62,6 +74,9 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         return new Phaser.Math.Vector2(randomStartingVelocityX, 200);
     }
 
+    // Setting the scale needs to take into account the starting direction of the sprite
+    // To start a sprite facing in the opposite direction of the original, provide a
+    // negative scale value when initializing the sprite
     private _setScale(scale: number): void {
         if (this.getBody().velocity.x > 0) this.setScale(-scale, Math.abs(scale));
         else this.setScale(scale, Math.abs(scale));
@@ -82,6 +97,7 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
     }
 
     private showPoints(): void {
+        console.log('>>>scale', { x: this.scaleX, y: this.scaleY }, this._scale);
         console.log('>>>positions', { x: this.x, y: this.y }, this.getBody().position);
         console.log(
             '>>>dimensions',
@@ -109,11 +125,17 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
                 Math.abs(10 * this._scale),
                 0x00ff00,
             );
-            this.debugBoundingBoxOrigin = this.scene.add.circle(
+            this.debugBoundingBoxCalculatedOrigin = this.scene.add.circle(
                 this.getBody().x + this.getBody().halfWidth,
                 this.getBody().y + this.getBody().halfHeight,
                 Math.abs(10 * this._scale),
                 0xff0000,
+            );
+            this.debugBoundingBoxPosition = this.scene.add.circle(
+                this.getBody().x,
+                this.getBody().y,
+                Math.abs(10 * this._scale),
+                0x0000ff,
             );
         }
     }
@@ -121,13 +143,21 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
     private debugShowOriginPoints(): void {
         if (this.scene && this.scene.game.config.physics.arcade?.debug) {
             const debugOriginPosition = { x: this.x + this.originX, y: this.y + this.originY };
-            const debugBoundingBoxOrigin = {
+            const debugBoundingBoxCalculatedOrigin = {
                 x: this.getBody().x + this.getBody().halfWidth,
                 y: this.getBody().y + this.getBody().halfHeight,
             };
+            const debugBoundingBoxPosition = {
+                x: this.getBody().x,
+                y: this.getBody().y,
+            };
 
             this.debugOrigin.setPosition(debugOriginPosition.x, debugOriginPosition.y);
-            this.debugBoundingBoxOrigin.setPosition(debugBoundingBoxOrigin.x, debugBoundingBoxOrigin.y);
+            this.debugBoundingBoxPosition.setPosition(debugBoundingBoxPosition.x, debugBoundingBoxPosition.y);
+            this.debugBoundingBoxCalculatedOrigin.setPosition(
+                debugBoundingBoxCalculatedOrigin.x,
+                debugBoundingBoxCalculatedOrigin.y,
+            );
         }
     }
 
