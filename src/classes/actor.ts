@@ -7,17 +7,27 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
     private debugBoundingBoxCalculatedOrigin!: GameObjects.Arc;
     private debugBoundingBoxPosition!: GameObjects.Arc;
     private keySpace: Input.Keyboard.Key;
+    private currentVelocity: Phaser.Math.Vector3;
+    private bodyMargins: BodyMarginsSimple;
 
     constructor(
         scene: Phaser.Scene,
         spriteName: string,
         position: Phaser.Math.Vector2,
         scale: number,
+        bodyMargins: BodyMarginsSimple | undefined,
         gravity?: number | undefined,
     ) {
         super(scene, position.x, position.y, spriteName);
 
         this._scale = scale;
+
+        this.bodyMargins = {
+            top: bodyMargins?.top === undefined ? 10 : bodyMargins?.top,
+            // right: bodyMargins?.right === undefined ? 10 : bodyMargins?.right,
+            // bottom: bodyMargins?.bottom === undefined ? 10 : bodyMargins?.bottom,
+            left: bodyMargins?.left === undefined ? 10 : bodyMargins?.left,
+        };
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
@@ -28,13 +38,19 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
 
         const startingVelocity: Phaser.Math.Vector2 = this.getStartingVelocity();
-        // this.setVelocity(startingVelocity.x, startingVelocity.y);
+        this.setVelocity(startingVelocity.x, startingVelocity.y);
         this._setScale(this._scale);
 
         // For debug
-        this.setGravityY(-300);
+        // this.setGravityY(-300);
         // this.setVelocity(startingVelocity.x, 0);
         // this.visible = false;
+
+        this.currentVelocity = new Phaser.Math.Vector3(
+            startingVelocity.x,
+            startingVelocity.y,
+            this.getBody().gravity.y,
+        );
 
         // For debug
         // this.showPoints();
@@ -44,112 +60,35 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         this.keySpace = this.scene.input.keyboard.addKey(32);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         this.keySpace.on('down', (event: KeyboardEvent) => {
-            const spriteScale = Math.abs(this._scale);
-            // this.getBody().setSize(sizeFactor * Math.abs(scale), sizeFactor * Math.abs(scale), true);
-            // let chk = {
-            //     scale: spriteScale,
-            //     sprite: {
-            //         dimensions: {
-            //             original: { w: this.width, h: this.height },
-            //             actual: { w: this.width * spriteScale, h: this.height * spriteScale },
-            //         },
-            //         origin: { x: this.x, y: this.y },
-            //         offset: { x: this.originX, y: this.originY },
-            //         pos: {
-            //             x: this.x - this.width * spriteScale * this.originX,
-            //             y: this.y - this.height * spriteScale * this.originY,
-            //         },
-            //     },
-            //     body: {
-            //         pos: { x: this.getBody().x, y: this.getBody().y }, // this is the top/left position
-            //         dimensions: { actual: { w: this.getBody().width, h: this.getBody().height } },
-            //         offset: this.getBody().offset, // when scaleX is negative, reverse/mirror x; from top/right
-            //         origin: {
-            //             x: this.getBody().x + this.getBody().halfWidth,
-            //             y: this.getBody().y + this.getBody().halfHeight,
-            //         },
-            //         transformOffset: {
-            //             x: this.getBody().x + this.getBody().halfWidth - this.x,
-            //             y: this.y - (this.getBody().y + this.getBody().halfHeight),
-            //         },
-            //         transformPosActual: {
-            //             x: this.getBody().x - (this.getBody().x + this.getBody().halfWidth - this.x),
-            //             y: this.getBody().y - (this.y - (this.getBody().y + this.getBody().halfHeight)),
-            //         },
-            //         transformOriginActual: {
-            //             x:
-            //                 this.getBody().x +
-            //                 this.getBody().halfWidth -
-            //                 (this.getBody().x + this.getBody().halfWidth - this.x),
-            //             y:
-            //                 this.getBody().y +
-            //                 this.getBody().halfHeight -
-            //                 (this.y - (this.getBody().y + this.getBody().halfHeight)),
-            //         },
-            //     },
-            // };
-
-            // this.createTempPoint(chk.body.transformOriginActual.x, chk.body.transformOriginActual.y, 0x22bacc);
-            // this.createTempPoint(chk.body.origin.x, chk.body.origin.y, 0x22bacc);
-
-            // console.log('>>>positions', JSON.stringify(chk, null, 2));
             // this.createTempPoint(chk.sprite.origin.x, chk.sprite.origin.y, 0xf81186);
-            // this.createTempPoint(chk.body.transformOffset.x, chk.body.transformOffset.y, 0x188cb5);
-            // this.createTempPoint(chk.body.transformPosActual.x, chk.body.transformPosActual.y, 0xdba507);
 
-            // this.createTempPoint(chk.sprite.pos.x + 1, chk.sprite.pos.y, 0xdba507);
-            // this.createTempPoint(this.getTopLeft().x, this.getTopLeft().y, 0x22bacc);
-
-            // this.getBody().setOffset(this.getBody().x - this.getBody().width - chk.body.transformOffset.x, 0);
-
-            // TODO: draw rectangle around scaled sprite
-
-            // this.getBody().position.x = this.x - this.originX * this.width + this.getBody().width;
-            // this.getBody().position.y = this.y - this.originY * this.height + this.getBody().height;
-
-            let chk = {
-                scale: this._scale,
-                sprite: {
-                    dimensions: {
-                        w: this.width * Math.abs(this._scale),
-                        h: this.height * Math.abs(this._scale),
-                    },
-                },
-                body: {
-                    dimensions: {
-                        w: this.getBody().width,
-                        h: this.getBody().height,
-                    },
-                },
-                diff: {
-                    dimensions: { w: 0, h: 0 },
-                },
-            };
-
-            chk.diff = {
-                dimensions: {
-                    w: chk.sprite.dimensions.w - chk.body.dimensions.w,
-                    h: chk.sprite.dimensions.h - chk.body.dimensions.h,
-                },
-            };
-
-            const offsetDelta = this.getOffsetDelta();
-
-            console.log('>>>chk', JSON.stringify(offsetDelta, null, 2));
-            this.getBody().setOffset(offsetDelta.w, offsetDelta.h);
-
-            this.createTempRectangle(
-                this.x,
-                this.y,
-                Math.abs(this._scale) * this.width,
-                Math.abs(this._scale) * this.height,
-                0x22bacc,
-            );
+            // this.createTempRectangle(
+            //     this.x,
+            //     this.y,
+            //     Math.abs(this._scale) * this.width,
+            //     Math.abs(this._scale) * this.height,
+            //     0x22bacc,
+            // );
 
             // this.getBody().setOffset(
             //     this.getBody().x + this.getBody().halfWidth - this.x + (this.width - this.getBody().width),
             //     0,
             // );
+
+            if (this.getBody().velocity.x !== 0) {
+                this.currentVelocity.x = this.getBody().velocity.x;
+                this.currentVelocity.y = this.getBody().velocity.y;
+                this.currentVelocity.z = this.getBody().gravity.y;
+            }
+
+            if (this.getBody().velocity.x === 0) {
+                this.setVelocity(this.currentVelocity.x, this.currentVelocity.y);
+                this.setGravityY(this.currentVelocity.z);
+            } else {
+                this.setVelocity(0, 0);
+                this.setGravityY(-300);
+            }
+
             // this.setVelocity(-this.getBody().velocity.x, this.getBody().velocity.y);
             // this.scaleX = -this.scaleX;
             // this.showPoints();
@@ -160,58 +99,32 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         });
     }
 
+    create(): void {}
+
     update(): void {
-        // this.checkFlip();
+        this.checkFlip();
 
         this.debugShowOriginPoints();
-        const offsetDelta = this.getOffsetDelta();
-        this.getBody().setOffset(offsetDelta.w, offsetDelta.h);
+
+        if (this.scene && this.scene.game.config.physics.arcade?.debug) {
+            this.createTempRectangle(
+                this.x,
+                this.y,
+                Math.abs(this._scale) * this.width,
+                Math.abs(this._scale) * this.height,
+                0x22bacc,
+                10,
+            );
+        }
     }
 
-    private getOffsetDelta(): ObjectDimensions {
-        let chk = {
-            scale: this._scale,
-            sprite: {
-                dimensions: {
-                    w: this.width * Math.abs(this._scale),
-                    h: this.height * Math.abs(this._scale),
-                },
-            },
-            body: {
-                dimensions: {
-                    w: this.getBody().width,
-                    h: this.getBody().height,
-                },
-            },
-            diff: {
-                dimensions: { w: 0, h: 0 },
-            },
-        };
-
-        chk.diff = {
-            dimensions: {
-                w: chk.sprite.dimensions.w - chk.body.dimensions.w,
-                h: chk.sprite.dimensions.h - chk.body.dimensions.h,
-            },
-        };
-
-        console.log('>>>chk', JSON.stringify(chk, null, 2));
-        this.getBody().setOffset(this.width - chk.diff.dimensions.w / 2 - 3.5, chk.diff.dimensions.h / 2 + 3.5);
-
-        let objectDimensions: ObjectDimensions = {
-            w: this.width - chk.diff.dimensions.w / 2 - 3.5,
-            h: chk.diff.dimensions.h / 2 + 3.5,
-        };
-        return objectDimensions;
-    }
-
-    private createTempRectangle(x: number, y: number, w: number, h: number, color = 0xffff00): void {
+    private createTempRectangle(x: number, y: number, w: number, h: number, color = 0xffff00, timeout = 2000): void {
         let box: GameObjects.Rectangle = this.scene.add.rectangle(x, y, w, h);
         box.setStrokeStyle(Math.abs(2 * this._scale), color);
 
         setTimeout(() => {
             box.destroy();
-        }, 2000);
+        }, timeout);
     }
     private createTempPoint(x: number, y: number, color = 0xffff00): void {
         let points: GameObjects.Arc = this.scene.add.circle(x, y, Math.abs(5 * this._scale), color);
@@ -236,13 +149,13 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
     // To start a sprite facing in the opposite direction of the original, provide a
     // negative scale value when initializing the sprite
     private _setScale(scale: number): void {
+        this.bodyMargins.left = this.getBody().width * this.bodyMargins.left;
+        this.bodyMargins.top = this.getBody().top * this.bodyMargins.top;
+
         if (this.getBody().velocity.x > 0) this.setScale(-scale, Math.abs(scale));
         else this.setScale(scale, Math.abs(scale));
 
-        const sizeFactor = this.width > this.height ? this.height : this.width;
-        this.getBody().setSize(sizeFactor * Math.abs(scale), sizeFactor * Math.abs(scale), true);
-
-        // if (this.scaleX < 0) this.getBody().setOffset(this.width, 0);
+        this.getBody().setSize(this.width - this.bodyMargins.left * 2, this.height - this.bodyMargins.top * 2);
     }
 
     private checkFlip(): void {
@@ -270,16 +183,15 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
     private setDirection(velocity: number): void {
         if (velocity < 0) {
             this.moveLeft();
-        } else {
+        } else if (velocity > 0) {
             this.moveRight();
         }
 
-        if (this.scaleX > 0) this.getBody().setOffset(0, 0);
-        else this.getBody().setOffset(this.getBody().width, 0);
-
-        // const calculatedOffsetX = this.x - this.originX * this.getBody().width - this.getBody().x;
-        // console.log('>>>calculatedOffsetX', calculatedOffsetX);
-        // if (calculatedOffsetX > 0) this.getBody().setOffset(calculatedOffsetX, 0);
+        if (this.scaleX < 0) {
+            this.getBody().setOffset(this.width - this.bodyMargins.left, this.bodyMargins.top);
+        } else {
+            this.getBody().setOffset(this.bodyMargins.left, this.bodyMargins.top);
+        }
     }
 
     private debugCreateOriginPoints(): void {

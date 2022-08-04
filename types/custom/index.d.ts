@@ -29,6 +29,18 @@ type ObjectDimensions = {
     h: number;
 };
 
+type BodyMargins = {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+};
+
+type BodyMarginsSimple = {
+    left: number;
+    top: number;
+};
+
 interface Callback {
     (scaleX: number): void;
 }
