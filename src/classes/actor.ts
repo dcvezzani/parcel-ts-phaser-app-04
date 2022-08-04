@@ -46,59 +46,105 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         this.keySpace.on('down', (event: KeyboardEvent) => {
             const spriteScale = Math.abs(this._scale);
             // this.getBody().setSize(sizeFactor * Math.abs(scale), sizeFactor * Math.abs(scale), true);
-            const chk = {
-                scale: spriteScale,
+            // let chk = {
+            //     scale: spriteScale,
+            //     sprite: {
+            //         dimensions: {
+            //             original: { w: this.width, h: this.height },
+            //             actual: { w: this.width * spriteScale, h: this.height * spriteScale },
+            //         },
+            //         origin: { x: this.x, y: this.y },
+            //         offset: { x: this.originX, y: this.originY },
+            //         pos: {
+            //             x: this.x - this.width * spriteScale * this.originX,
+            //             y: this.y - this.height * spriteScale * this.originY,
+            //         },
+            //     },
+            //     body: {
+            //         pos: { x: this.getBody().x, y: this.getBody().y }, // this is the top/left position
+            //         dimensions: { actual: { w: this.getBody().width, h: this.getBody().height } },
+            //         offset: this.getBody().offset, // when scaleX is negative, reverse/mirror x; from top/right
+            //         origin: {
+            //             x: this.getBody().x + this.getBody().halfWidth,
+            //             y: this.getBody().y + this.getBody().halfHeight,
+            //         },
+            //         transformOffset: {
+            //             x: this.getBody().x + this.getBody().halfWidth - this.x,
+            //             y: this.y - (this.getBody().y + this.getBody().halfHeight),
+            //         },
+            //         transformPosActual: {
+            //             x: this.getBody().x - (this.getBody().x + this.getBody().halfWidth - this.x),
+            //             y: this.getBody().y - (this.y - (this.getBody().y + this.getBody().halfHeight)),
+            //         },
+            //         transformOriginActual: {
+            //             x:
+            //                 this.getBody().x +
+            //                 this.getBody().halfWidth -
+            //                 (this.getBody().x + this.getBody().halfWidth - this.x),
+            //             y:
+            //                 this.getBody().y +
+            //                 this.getBody().halfHeight -
+            //                 (this.y - (this.getBody().y + this.getBody().halfHeight)),
+            //         },
+            //     },
+            // };
+
+            // this.createTempPoint(chk.body.transformOriginActual.x, chk.body.transformOriginActual.y, 0x22bacc);
+            // this.createTempPoint(chk.body.origin.x, chk.body.origin.y, 0x22bacc);
+
+            // console.log('>>>positions', JSON.stringify(chk, null, 2));
+            // this.createTempPoint(chk.sprite.origin.x, chk.sprite.origin.y, 0xf81186);
+            // this.createTempPoint(chk.body.transformOffset.x, chk.body.transformOffset.y, 0x188cb5);
+            // this.createTempPoint(chk.body.transformPosActual.x, chk.body.transformPosActual.y, 0xdba507);
+
+            // this.createTempPoint(chk.sprite.pos.x + 1, chk.sprite.pos.y, 0xdba507);
+            // this.createTempPoint(this.getTopLeft().x, this.getTopLeft().y, 0x22bacc);
+
+            // this.getBody().setOffset(this.getBody().x - this.getBody().width - chk.body.transformOffset.x, 0);
+
+            // TODO: draw rectangle around scaled sprite
+
+            // this.getBody().position.x = this.x - this.originX * this.width + this.getBody().width;
+            // this.getBody().position.y = this.y - this.originY * this.height + this.getBody().height;
+
+            let chk = {
+                scale: this._scale,
                 sprite: {
                     dimensions: {
-                        original: { w: this.width, h: this.height },
-                        actual: { w: this.width * spriteScale, h: this.height * spriteScale },
-                    },
-                    origin: { x: this.x, y: this.y },
-                    offset: { x: this.originX, y: this.originY },
-                    pos: {
-                        x: this.x - this.width * spriteScale * this.originX,
-                        y: this.y - this.height * spriteScale * this.originY,
+                        w: this.width * Math.abs(this._scale),
+                        h: this.height * Math.abs(this._scale),
                     },
                 },
                 body: {
-                    pos: { x: this.getBody().x, y: this.getBody().y }, // this is the top/left position
-                    dimensions: { actual: { w: this.getBody().width, h: this.getBody().height } },
-                    offset: this.getBody().offset, // when scaleX is negative, reverse/mirror x; from top/right
-                    origin: {
-                        x: this.getBody().x + this.getBody().halfWidth,
-                        y: this.getBody().y + this.getBody().halfHeight,
+                    dimensions: {
+                        w: this.getBody().width,
+                        h: this.getBody().height,
                     },
-                    transformOffset: {
-                        x: this.getBody().x + this.getBody().halfWidth - this.x,
-                        y: this.y - (this.getBody().y + this.getBody().halfHeight),
-                    },
-                    transformPosActual: {
-                        x: this.getBody().x - (this.getBody().x + this.getBody().halfWidth - this.x),
-                        y: this.getBody().y - (this.y - (this.getBody().y + this.getBody().halfHeight)),
-                    },
-                    transformOriginActual: {
-                        x:
-                            this.getBody().x +
-                            this.getBody().halfWidth -
-                            (this.getBody().x + this.getBody().halfWidth - this.x),
-                        y:
-                            this.getBody().y +
-                            this.getBody().halfHeight -
-                            (this.y - (this.getBody().y + this.getBody().halfHeight)),
-                    },
+                },
+                diff: {
+                    dimensions: { w: 0, h: 0 },
                 },
             };
 
-            console.log('>>>positions', JSON.stringify(chk, null, 2));
-            // this.createTempPoint(chk.sprite.origin.x, chk.sprite.origin.y, 0xf81186);
-            this.createTempPoint(chk.body.transformOffset.x, chk.body.transformOffset.y, 0x188cb5);
-            this.createTempPoint(chk.body.transformOriginActual.x, chk.body.transformOriginActual.y, 0x22bacc);
-            this.createTempPoint(chk.body.transformPosActual.x, chk.body.transformPosActual.y, 0xdba507);
+            chk.diff = {
+                dimensions: {
+                    w: chk.sprite.dimensions.w - chk.body.dimensions.w,
+                    h: chk.sprite.dimensions.h - chk.body.dimensions.h,
+                },
+            };
 
-            this.createTempPoint(chk.sprite.pos.x + 1, chk.sprite.pos.y, 0xdba507);
-            this.createTempPoint(this.getTopLeft().x, this.getTopLeft().y, 0x22bacc);
+            const offsetDelta = this.getOffsetDelta();
 
-            // TODO: draw rectangle around scaled sprite
+            console.log('>>>chk', JSON.stringify(offsetDelta, null, 2));
+            this.getBody().setOffset(offsetDelta.w, offsetDelta.h);
+
+            this.createTempRectangle(
+                this.x,
+                this.y,
+                Math.abs(this._scale) * this.width,
+                Math.abs(this._scale) * this.height,
+                0x22bacc,
+            );
 
             // this.getBody().setOffset(
             //     this.getBody().x + this.getBody().halfWidth - this.x + (this.width - this.getBody().width),
@@ -118,8 +164,55 @@ export default class Actor extends Phaser.Physics.Arcade.Sprite {
         // this.checkFlip();
 
         this.debugShowOriginPoints();
+        const offsetDelta = this.getOffsetDelta();
+        this.getBody().setOffset(offsetDelta.w, offsetDelta.h);
     }
 
+    private getOffsetDelta(): ObjectDimensions {
+        let chk = {
+            scale: this._scale,
+            sprite: {
+                dimensions: {
+                    w: this.width * Math.abs(this._scale),
+                    h: this.height * Math.abs(this._scale),
+                },
+            },
+            body: {
+                dimensions: {
+                    w: this.getBody().width,
+                    h: this.getBody().height,
+                },
+            },
+            diff: {
+                dimensions: { w: 0, h: 0 },
+            },
+        };
+
+        chk.diff = {
+            dimensions: {
+                w: chk.sprite.dimensions.w - chk.body.dimensions.w,
+                h: chk.sprite.dimensions.h - chk.body.dimensions.h,
+            },
+        };
+
+        console.log('>>>chk', JSON.stringify(chk, null, 2));
+        this.getBody().setOffset(this.width - chk.diff.dimensions.w / 2 - 3.5, chk.diff.dimensions.h / 2 + 3.5);
+
+        let objectDimensions: ObjectDimensions = {
+            w: this.width - chk.diff.dimensions.w / 2 - 3.5,
+            h: chk.diff.dimensions.h / 2 + 3.5,
+        };
+        return objectDimensions;
+    }
+
+    private createTempRectangle(x: number, y: number, w: number, h: number, color = 0xffff00): void {
+        let box: GameObjects.Rectangle = this.scene.add.rectangle(x, y, w, h);
+        box.setStrokeStyle(Math.abs(2 * this._scale), color);
+
+        setTimeout(() => {
+            box.destroy();
+        }, 2000);
+    }
     private createTempPoint(x: number, y: number, color = 0xffff00): void {
         let points: GameObjects.Arc = this.scene.add.circle(x, y, Math.abs(5 * this._scale), color);
 

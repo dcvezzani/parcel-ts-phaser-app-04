@@ -24,6 +24,11 @@ type SpriteAndBodyOrigins = {
     bodyOrigin: MatterJS.Vector;
 };
 
+type ObjectDimensions = {
+    w: number;
+    h: number;
+};
+
 interface Callback {
     (scaleX: number): void;
 }
