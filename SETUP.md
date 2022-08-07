@@ -8,6 +8,12 @@ drag install application (nvm-setup) to your desktop, right click and "Run as ad
 nvm install 16.16.0
 nvm use 16.16.0
 
+Clone repo
+git clone https://github.com/dcvezzani/parcel-ts-phaser-app-04.git
+
+Install node libraries
+npm install --location=global typescript ts-node parcel
+
 Determine if your Windows is a 32 or 64-bit operating system
 Settings > System > About
 You'll need this information to know which installers you should download
@@ -27,6 +33,10 @@ Install Visual Studio Extensions
 - ESLint: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
 - IntelliCode: https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
 - Prettier - Code formatter: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+
+Prettier
+Update Config Path to point to ".prettierrc"
+Right click and format document; select Prettier as the function to format
 
 
 Install Tiled
