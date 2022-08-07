@@ -23,6 +23,12 @@ Pen and touch	No pen or touch input is available for this display
 Install Visual Studio Code
 https://code.visualstudio.com/Download
 
+Install Visual Studio Extensions
+- ESLint: https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint
+- IntelliCode: https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
+- Prettier - Code formatter: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
+
+
 Install Tiled
 Click Download Now
 You are not required to pay anything! Click "No thanks, just take me to the downloads"
