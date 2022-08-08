@@ -68,7 +68,6 @@ Install Visual Studio Code Extensions
 - IntelliCode: https://marketplace.visualstudio.com/items?itemName=VisualStudioExptTeam.vscodeintellicode
 - Prettier - Code formatter: https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode
 
-![](images/3f5e8886-95ad-453f-ac0d-f888be755db8-01.png)
 ![](images/baeef3d4-2421-4b58-94e7-b6dfdc7dee8f-01.png)
 
 When Visual Studio Code opens the extension, locate the gear/cog next to the extension name
@@ -79,14 +78,10 @@ Local Prettier extensions
 - click on extensions icon on the left side bar
 - click on the Prettier extension; the right pane should open more information about Prettier
 
-Extension icon in left pane menu
-![](images/5a41dd85-802b-4a76-a4a7-3f2b73c76b9e-01.png)
-
 Find Prettier in list of extensions
 ![](images/38fdaaca-84d0-4bd0-8a33-7de5f4a90a6e-01.png)
 
 Gear/Cog
-![](images/a45d52b0-88e9-4eaf-bf69-1a83bf405a02-01.png)
 ![](images/cce60580-3cd5-421e-9fc5-e04530f1d7ba-01.png)
 
 Please configure the Prettier extension as follows
@@ -209,4 +204,5 @@ Then open a web browser window and navigate to:
 Great job!!
 
 If you were able to execute those last two "Git Bash" shell commands without errors and you see something in your browser window (you'll know what I mean), then you should be all set to start our next class!
+
 
