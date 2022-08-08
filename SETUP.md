@@ -70,7 +70,7 @@ Install Visual Studio Code Extensions
 
 ![](images/baeef3d4-2421-4b58-94e7-b6dfdc7dee8f-01.png)
 
-When Visual Studio Code opens the extension, locate the gear/cog next to the extension name
+When Visual Studio Code opens the extension, click the blue install button.
 
 ![](images/5c8f9ccc-a848-4ae5-9797-2946b79a0523-01.png)
 
