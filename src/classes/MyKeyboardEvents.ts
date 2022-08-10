@@ -6,7 +6,7 @@ window.__keysPressed__ = {
 };
 
 function handleKey(e, active): void {
-    console.log(`key: ${e.key}, active: ${active}`);
+    // console.log(`key: ${e.key}, active: ${active}`);
     switch (e.key) {
         case 'w':
             window.__keysPressed__.up = active;

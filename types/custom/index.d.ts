@@ -29,6 +29,7 @@ interface Callback {
 }
 
 declare module '*.png';
+declare module '*.json';
 
 interface MyInputKeys {
     up: boolean;

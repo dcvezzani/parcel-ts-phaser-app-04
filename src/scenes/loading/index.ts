@@ -1,19 +1,15 @@
 import { Scene, GameObjects } from 'phaser';
-import images from '~/src/assets/sprites';
+import { sprites, spriteSheets, spriteSheetJSON } from '~/src/assets';
 
 export class LoadingScene extends Scene {
     constructor() {
         super('loading-scene');
     }
     preload(): void {
-        // this.load.baseURL = 'assets/';
+        console.table(sprites);
 
-        console.table(images);
-
-        // key: 'king'
-        // path from baseURL to file: 'sprites/king.png'
-        // this.load.image('king', './sprites/king.png');
-        this.load.image('king', images.king);
+        this.load.image('king', sprites.king);
+        this.load.atlas('a-king', spriteSheets.king, spriteSheetJSON.kingAtlas);
     }
     create(): void {
         this.scene.start('level-1-scene');
