@@ -27,3 +27,18 @@ type SpriteAndBodyOrigins = {
 interface Callback {
     (scaleX: number): void;
 }
+
+declare module '*.png';
+
+interface MyInputKeys {
+    up: boolean;
+    right: boolean;
+    down: boolean;
+    left: boolean;
+}
+
+interface Window {
+    sizeChanged: () => void;
+    game: Phaser.Game;
+    __keysPressed__: MyInputKeys;
+}
