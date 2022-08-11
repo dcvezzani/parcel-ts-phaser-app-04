@@ -3,6 +3,7 @@ window.__keysPressed__ = {
     right: false,
     down: false,
     left: false,
+    space: false,
 };
 
 function handleKey(e, active): void {

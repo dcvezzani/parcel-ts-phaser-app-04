@@ -36,6 +36,7 @@ interface MyInputKeys {
     right: boolean;
     down: boolean;
     left: boolean;
+    space: boolean;
 }
 
 interface Window {
@@ -43,3 +44,7 @@ interface Window {
     game: Phaser.Game;
     __keysPressed__: MyInputKeys;
 }
+
+type GameConfigExtended = Phaser.Types.Core.GameConfig & {
+    winScore: number;
+};

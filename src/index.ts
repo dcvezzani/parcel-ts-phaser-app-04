@@ -1,5 +1,5 @@
 import { Game, Types } from 'phaser';
-import { Level1, LoadingScene } from './scenes';
+import { Level1, LoadingScene, UIScene } from './scenes';
 
 let sizeChangedTimeout = 0;
 window.sizeChanged = () => {
@@ -18,7 +18,7 @@ window.sizeChanged = () => {
     }, 250);
 };
 
-const gameConfig: Types.Core.GameConfig = {
+export const gameConfig: GameConfigExtended = {
     title: 'Phaser game tutorial',
     type: Phaser.WEBGL,
     parent: 'game',
@@ -48,7 +48,8 @@ const gameConfig: Types.Core.GameConfig = {
     audio: {
         disableWebAudio: true,
     },
-    scene: [LoadingScene, Level1],
+    scene: [LoadingScene, Level1, UIScene],
+    winScore: 40,
 };
 
 window.game = new Game(gameConfig);
