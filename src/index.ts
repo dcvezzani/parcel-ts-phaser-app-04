@@ -22,6 +22,7 @@ export const gameConfig: GameConfigExtended = {
     title: 'Phaser game tutorial',
     type: Phaser.WEBGL,
     parent: 'game',
+    transparent: true,
     backgroundColor: '#351f1b',
     scale: {
         mode: Phaser.Scale.ScaleModes.NONE,
