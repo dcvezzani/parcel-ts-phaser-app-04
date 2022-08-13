@@ -5,7 +5,7 @@ import { Text } from './text';
 
 const handleSpaceDown = (self: any) =>
     function (event): void {
-        if (event.keyCode === 32) {
+        if (event.key === ' ') {
             if (self?.anims?.play) self.anims.play('attack', true);
             if (self?.scene?.game) self.scene.game.events.emit(EVENTS_NAME.attack);
         }

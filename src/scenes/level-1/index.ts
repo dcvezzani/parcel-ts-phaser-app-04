@@ -24,7 +24,6 @@ export class Level1 extends Scene {
         this.player = new Player(this, 300, 300);
         this.player.create();
         this.physics.add.collider(this.player, this.wallsLayer);
-
         this.initChests();
 
         this.initCamera();
@@ -32,25 +31,6 @@ export class Level1 extends Scene {
         this.initEnemies();
 
         this.initFogOfWar();
-
-        // const mask = new Physics.Arcade.Image(this, 250, 250, 'vision');
-        // mask.scale = 0.15;
-        // this.add.existing(mask);
-        // const mask = this.make.image({ key: 'vision', x: 100, y: 100 });
-
-        // const mask = this.make.image({
-        //     x: this.scale.width / 2,
-        //     y: this.scale.height / 2,
-        //     key: 'vision',
-        //     add: true,
-        // });
-
-        // this.player.mask = new Phaser.Display.Masks.BitmapMask(this, mask);
-
-        // this.input.on('pointermove', function (pointer) {
-        //     mask.x = pointer.x - mask.displayWidth;
-        //     mask.y = pointer.y - mask.displayHeight;
-        // });
     }
 
     update(): void {
